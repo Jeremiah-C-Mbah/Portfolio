@@ -7,5 +7,3 @@ Welcome to my personal portfolio website! This project showcases some of my skil
 - _HTML5_ – Structure of the website
 - _CSS3_ – Styling and layout
 - _JavaScript_ – Interactive features and dynamic behavior
-
-## 📁 Project Structure
