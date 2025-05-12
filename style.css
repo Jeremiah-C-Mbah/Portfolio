@@ -15,6 +15,25 @@ a {
   color: white;
   text-decoration: none;
 }
+span {
+  position: relative;
+  display: inline-block;
+  font-weight: 700;
+  background: linear-gradient(90deg, #9ec2ee, #ffffff, #9ec2ee);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 3s linear infinite;
+}
+
+@keyframes shine {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
 .navbar {
   position: absolute;
   left: 0;
@@ -54,7 +73,7 @@ a {
 }
 .navbar ul li:hover a,
 .navbar ul li.active a {
-  color: #7cf03d;
+  color: #9ec2ee;
 }
 .home {
   display: flex;
@@ -80,7 +99,7 @@ a {
   position: relative;
   display: inline-block;
   color: transparent;
-  -webkit-text-stroke: 0.7px #7cf03d;
+  -webkit-text-stroke: 0.7px #9ec2ee;
   animation: display-text 16s linear infinite;
   animation-delay: calc(-4s * var(--i));
 }
@@ -94,8 +113,8 @@ a {
   content: attr(data-text);
   position: absolute;
   width: 0;
-  border-right: 2px solid #7cf03d;
-  color: #7cf03d;
+  border-right: 2px solid #9ec2ee;
+  color: #9ec2ee;
   white-space: nowrap;
   overflow: hidden;
   animation: fill-text 4s linear infinite;
@@ -121,10 +140,10 @@ a {
 .btn {
   display: inline-block;
   padding: 10px 30px;
-  background: #7cf03d;
-  border: 2px solid #7cf03d;
+  background: #9ec2ee;
+  border: 2px solid #9ec2ee;
   border-radius: 40px;
-  box-shadow: 0 0 10px #7cf03d;
+  box-shadow: 0 0 10px #9ec2ee;
   font-size: 16px;
   color: #1f242d;
   font-weight: 600;
@@ -132,7 +151,7 @@ a {
 }
 .btn:hover {
   background: transparent;
-  color: #7cf03d;
+  color: #9ec2ee;
   box-shadow: none;
 }
 .home-info .btn-sci .sci {
@@ -141,17 +160,17 @@ a {
 .home-info .btn-sci .sci a {
   display: inline-flex;
   padding: 8px;
-  border: 2px solid #7cf03d;
+  border: 2px solid #9ec2ee;
   border-radius: 50%;
   font-size: 20px;
-  color: #7cf03d;
+  color: #9ec2ee;
   margin-top: 0 8px;
   transition: 0.5s;
 }
 .home-info .btn-sci .sci a:hover {
-  background: #7cf03d;
+  background: #9ec2ee;
   color: #1f242d;
-  box-shadow: 0 0 10px #7cf03d;
+  box-shadow: 0 0 10px #9ec2ee;
 }
 .home-img .img-box {
   position: relative;
@@ -171,7 +190,7 @@ a {
   position: absolute;
   width: 500px;
   height: 500px;
-  background: conic-gradient(transparent, transparent, transparent, #7cf03d);
+  background: conic-gradient(transparent, transparent, transparent, #9ec2ee);
   transform: rotate(0deg);
   animation: rotate-border 10s linear infinite;
 }
@@ -233,7 +252,7 @@ a {
   margin-bottom: 2rem;
 }
 .heading span {
-  color: #7cf03d;
+  color: #9ec2ee;
 }
 .services {
   align-items: center;
