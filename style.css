@@ -6,13 +6,17 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
+html {
+  font-size: 62.5%;
+  color: white;
+}
 
 a {
   color: white;
   text-decoration: none;
 }
 .navbar {
-  position: fixed;
+  position: absolute;
   left: 0;
   top: 0;
   width: 100%;
@@ -200,11 +204,14 @@ a {
   mix-blend-mode: lighten;
 }
 .bars-animation {
-  position: absolute;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   display: flex;
   z-index: -1;
+  pointer-events: none;
 }
 .bars-animation .bar {
   width: 100%;
@@ -219,4 +226,63 @@ a {
   100% {
     transform: translateY(0);
   }
+}
+.heading {
+  font-size: 4.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.heading span {
+  color: #7cf03d;
+}
+.services {
+  align-items: center;
+  gap: 50px;
+  height: 100vh;
+
+  color: #fff;
+  visibility: hidden;
+  opacity: 0;
+  animation: show-content 1.5s linear forwards;
+  animation-delay: 1.6s;
+}
+.services-container {
+  display: flex;
+  padding: 4rem 5rem 0;
+  width: 100%;
+  height: 50%;
+  grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+  gap: 2rem;
+}
+.services-container .services-box {
+  padding: 3rem 2.5rem;
+  background-color: #272c33;
+  border: 0.2rem solid #272c33;
+  border-radius: 2rem;
+}
+.services-box .icon {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.services-box .icon {
+  font-size: 3rem;
+}
+.services-box .icon a {
+  display: inline-flex;
+  background-color: whitesmoke;
+  border-radius: 50%;
+  padding: 1rem;
+}
+.services-box .icon a i {
+  font-size: 2rem;
+  color: #1f242d;
+  transform: rotate(225deg);
+}
+.services-box h3 {
+  font-size: 2rem;
+  margin: 0.5rem 0 2rem;
+}
+.services-box p {
+  font-size: 1.5rem;
 }
