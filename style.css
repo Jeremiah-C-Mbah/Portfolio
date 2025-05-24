@@ -258,20 +258,29 @@ span {
   align-items: center;
   gap: 50px;
   height: 100vh;
-
   color: #fff;
   visibility: hidden;
   opacity: 0;
   animation: show-content 1.5s linear forwards;
   animation-delay: 1.6s;
 }
-.services-container {
+/* .services-container {
   display: flex;
   padding: 4rem 5rem 0;
   width: 100%;
   height: 50%;
   grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
   gap: 2rem;
+} */
+.services-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.services-box {
+  height: 100%;
 }
 .services-container .services-box {
   padding: 3rem 2.5rem;
@@ -304,4 +313,75 @@ span {
 }
 .services-box p {
   font-size: 1.5rem;
+}
+.portfolio {
+  padding: 6rem 9%;
+  background-color: #1f242d;
+  visibility: hidden;
+  opacity: 0;
+  animation: show-content 1.5s linear forwards;
+  animation-delay: 1.6s;
+}
+.portfolio-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+.portfolio-item {
+  background: #2c2f3f;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 0 10px #9ec2ee33;
+}
+.portfolio-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+.portfolio-item h3 {
+  margin-top: 1rem;
+  font-size: 2rem;
+}
+.portfolio-item p {
+  font-size: 1.4rem;
+  color: #ccc;
+}
+.services,
+.portfolio {
+  padding-bottom: 2rem;
+  padding-top: 2rem;
+}
+
+.contact {
+  padding: 6rem 9%;
+  background: #1f242d;
+  visibility: hidden;
+  opacity: 0;
+  animation: show-content 1.5s linear forwards;
+  animation-delay: 1.6s;
+}
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 600px;
+  margin: auto;
+}
+.contact-form input,
+.contact-form textarea {
+  padding: 1rem;
+  background: #2c2f3f;
+  border: 1px solid #9ec2ee;
+  border-radius: 8px;
+  color: white;
+  font-size: 1.6rem;
+}
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: #ccc;
+}
+.contact-form button {
+  align-self: flex-start;
 }
