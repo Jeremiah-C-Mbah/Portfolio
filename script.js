@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
+  // Start at top of page on refresh
+  window.scrollTo(0, 0);
+
   const navLinks = document.querySelectorAll(".navbar ul li a");
 
   navLinks.forEach((link) => {
