@@ -63,42 +63,14 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  // ✅ Contact form success message (optional)
   const contactForm = document.querySelector(".contact-form");
-
-  contactForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const formData = new FormData(this);
-    const name = this.querySelector('input[type="text"]').value;
-    const email = this.querySelector('input[type="email"]').value;
-    const message = this.querySelector("textarea").value;
-
-    if (!name.trim() || !email.trim() || !message.trim()) {
-      showNotification("Please fill in all fields", "error");
-      return;
+  if (contactForm) {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get("success") === "true") {
+      showNotification("Message sent successfully!", "success");
     }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      showNotification("Please enter a valid email address", "error");
-      return;
-    }
-
-    const submitBtn = this.querySelector('button[type="submit"]');
-    const originalText = submitBtn.textContent;
-    submitBtn.textContent = "Sending...";
-    submitBtn.disabled = true;
-
-    setTimeout(() => {
-      showNotification(
-        "Message sent successfully! I'll get back to you soon.",
-        "success"
-      );
-      this.reset();
-      submitBtn.textContent = originalText;
-      submitBtn.disabled = false;
-    }, 2000);
-  });
+  }
 
   function showNotification(message, type) {
     const existingNotification = document.querySelector(".notification");
@@ -224,7 +196,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   const spans = document.querySelectorAll(".home-info h2 span");
-  let currentIndex = 0;
 
   function enhanceTypingEffect() {
     spans.forEach((span, index) => {
@@ -258,7 +229,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }, observerOptions);
 
-  [...serviceBoxes, ...portfolioItems].forEach((item) => {
+  const fadeItems = [
+    ...document.querySelectorAll(".services-box"),
+    ...document.querySelectorAll(".portfolio-item"),
+  ];
+
+  fadeItems.forEach((item) => {
     item.style.transform = "translateY(30px)";
     item.style.opacity = "0.8";
     item.style.transition = "all 0.6s ease";
