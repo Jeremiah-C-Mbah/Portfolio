@@ -63,13 +63,68 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // ✅ Contact form success message (optional)
   const contactForm = document.querySelector(".contact-form");
+
   if (contactForm) {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get("success") === "true") {
-      showNotification("Message sent successfully!", "success");
-    }
+    contactForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(contactForm);
+      const name = contactForm.querySelector('input[name="name"]').value.trim();
+      const email = contactForm
+        .querySelector('input[name="email"]')
+        .value.trim();
+      const message = contactForm
+        .querySelector('textarea[name="message"]')
+        .value.trim();
+
+      if (!name || !email || !message) {
+        showNotification("Please fill in all fields", "error");
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showNotification("Please enter a valid email address", "error");
+        return;
+      }
+
+      const submitBtn = contactForm.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = "Sending...";
+      submitBtn.disabled = true;
+
+      try {
+        const response = await fetch("https://formspree.io/f/mrbknkqe", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+          },
+          body: formData,
+        });
+
+        if (response.ok) {
+          showNotification(
+            "Message sent successfully! I'll get back to you soon.",
+            "success"
+          );
+          contactForm.reset();
+        } else {
+          showNotification(
+            "Something went wrong. Please try again later.",
+            "error"
+          );
+        }
+      } catch (error) {
+        showNotification(
+          "Network error. Please check your internet connection.",
+          "error"
+        );
+      }
+
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+    });
   }
 
   function showNotification(message, type) {
@@ -83,22 +138,18 @@ document.addEventListener("DOMContentLoaded", function () {
     notification.textContent = message;
 
     notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 8px;
-            color: white;
-            font-weight: 500;
-            z-index: 1000;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            ${
-              type === "success"
-                ? "background: #4caf50;"
-                : "background: #f44336;"
-            }
-        `;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 500;
+      z-index: 1000;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      ${type === "success" ? "background: #4caf50;" : "background: #f44336;"}
+    `;
 
     document.body.appendChild(notification);
 
@@ -116,187 +167,114 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 5000);
   }
 
-  const serviceBoxes = document.querySelectorAll(".services-box");
+  // 🟡 Additional UX Effects
 
-  serviceBoxes.forEach((box) => {
-    box.addEventListener("mouseenter", function () {
+  // Typing effect
+  const spans = document.querySelectorAll(".home-info h2 span");
+  spans.forEach((span, index) => {
+    const style = document.createElement("style");
+    style.textContent = `
+      .home-info h2 span:nth-child(${index + 1})::before {
+        animation: fill-text 4s linear infinite, cursor-blink 1s infinite;
+      }
+      @keyframes cursor-blink {
+        0%, 50% { border-right-color: #9ec2ee; }
+        51%, 100% { border-right-color: transparent; }
+      }
+    `;
+    document.head.appendChild(style);
+  });
+
+  // Service/Portfolio hover effect
+  const hoverItems = document.querySelectorAll(
+    ".services-box, .portfolio-item"
+  );
+  hoverItems.forEach((item) => {
+    item.addEventListener("mouseenter", function () {
       this.style.transform = "translateY(-10px)";
       this.style.boxShadow = "0 10px 30px rgba(158, 194, 238, 0.3)";
       this.style.borderColor = "#9ec2ee";
       this.style.transition = "all 0.3s ease";
     });
-
-    box.addEventListener("mouseleave", function () {
+    item.addEventListener("mouseleave", function () {
       this.style.transform = "translateY(0)";
       this.style.boxShadow = "none";
       this.style.borderColor = "#272c33";
     });
   });
 
-  const portfolioItems = document.querySelectorAll(".portfolio-item");
+  // Intersection Observer reveal
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.style.transform = "translateY(0)";
+          entry.target.style.opacity = "1";
+        }
+      });
+    },
+    {
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px",
+    }
+  );
 
-  portfolioItems.forEach((item) => {
-    item.addEventListener("mouseenter", function () {
-      this.style.transform = "scale(1.05)";
-      this.style.boxShadow = "0 15px 40px rgba(158, 194, 238, 0.4)";
-      this.style.transition = "all 0.3s ease";
-    });
-
-    item.addEventListener("mouseleave", function () {
-      this.style.transform = "scale(1)";
-      this.style.boxShadow = "0 0 10px #9ec2ee33";
-    });
-
-    item.addEventListener("click", function () {
-      const projectName = this.querySelector("h3").textContent;
-      showNotification(
-        `Opening ${projectName}... (Link portfolio projects here)`,
-        "success"
-      );
-    });
-  });
-
-  const socialLinks = document.querySelectorAll(".sci a");
-
-  socialLinks.forEach((link) => {
-    link.addEventListener("click", function (e) {
-      e.preventDefault();
-      const icon = this.querySelector("i");
-      let platform = "";
-
-      if (icon.classList.contains("bxl-github")) {
-        platform = "GitHub";
-      } else if (icon.classList.contains("bxl-linkedin")) {
-        platform = "LinkedIn";
-      } else if (icon.classList.contains("bxl-youtube")) {
-        platform = "YouTube";
-      } else if (icon.classList.contains("bxl-twitter")) {
-        platform = "Twitter";
-      }
-
-      showNotification(
-        `Opening ${platform} profile... (links here)`,
-        "success"
-      );
-    });
-  });
-
-  const downloadBtn = document.querySelector(".btn-sci .btn");
-
-  downloadBtn.addEventListener("click", function (e) {
-    e.preventDefault();
-
-    const originalText = this.textContent;
-    this.textContent = "Downloading...";
-
-    setTimeout(() => {
-      showNotification("CV download started!", "success");
-      this.textContent = originalText;
-    }, 1000);
-  });
-
-  const spans = document.querySelectorAll(".home-info h2 span");
-
-  function enhanceTypingEffect() {
-    spans.forEach((span, index) => {
-      const style = document.createElement("style");
-      style.textContent = `
-                .home-info h2 span:nth-child(${index + 1})::before {
-                    animation: fill-text 4s linear infinite, cursor-blink 1s infinite;
-                }
-                @keyframes cursor-blink {
-                    0%, 50% { border-right-color: #9ec2ee; }
-                    51%, 100% { border-right-color: transparent; }
-                }
-            `;
-      document.head.appendChild(style);
-    });
-  }
-
-  enhanceTypingEffect();
-
-  const observerOptions = {
-    threshold: 0.1,
-    rootMargin: "0px 0px -50px 0px",
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.style.transform = "translateY(0)";
-        entry.target.style.opacity = "1";
-      }
-    });
-  }, observerOptions);
-
-  const fadeItems = [
-    ...document.querySelectorAll(".services-box"),
-    ...document.querySelectorAll(".portfolio-item"),
-  ];
-
-  fadeItems.forEach((item) => {
+  hoverItems.forEach((item) => {
     item.style.transform = "translateY(30px)";
     item.style.opacity = "0.8";
     item.style.transition = "all 0.6s ease";
     observer.observe(item);
   });
 
+  // Mouse particle trail
   let mouseX = 0,
     mouseY = 0;
-
   document.addEventListener("mousemove", (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
-
-    if (Math.random() > 0.98) {
-      createParticle(mouseX, mouseY);
-    }
+    if (Math.random() > 0.98) createParticle(mouseX, mouseY);
   });
 
   function createParticle(x, y) {
     const particle = document.createElement("div");
     particle.style.cssText = `
-            position: fixed;
-            width: 3px;
-            height: 3px;
-            background: #9ec2ee;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 1000;
-            left: ${x}px;
-            top: ${y}px;
-            opacity: 0.7;
-            transform: scale(0);
-            animation: particle-fade 2s ease-out forwards;
-        `;
-
+      position: fixed;
+      width: 3px;
+      height: 3px;
+      background: #9ec2ee;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1000;
+      left: ${x}px;
+      top: ${y}px;
+      opacity: 0.7;
+      transform: scale(0);
+      animation: particle-fade 2s ease-out forwards;
+    `;
     document.body.appendChild(particle);
-
     setTimeout(() => {
-      if (particle.parentNode) {
-        particle.remove();
-      }
+      if (particle.parentNode) particle.remove();
     }, 2000);
   }
 
   const particleStyle = document.createElement("style");
   particleStyle.textContent = `
-        @keyframes particle-fade {
-            0% {
-                transform: scale(0) translateY(0);
-                opacity: 0.7;
-            }
-            50% {
-                transform: scale(1) translateY(-20px);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(0) translateY(-40px);
-                opacity: 0;
-            }
-        }
-    `;
+    @keyframes particle-fade {
+      0% {
+        transform: scale(0) translateY(0);
+        opacity: 0.7;
+      }
+      50% {
+        transform: scale(1) translateY(-20px);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(0) translateY(-40px);
+        opacity: 0;
+      }
+    }
+  `;
   document.head.appendChild(particleStyle);
 
-  console.log("Portfolio JavaScript loaded successfully! 🚀");
+  console.log("Portfolio JavaScript fully loaded with effects ✅");
 });
